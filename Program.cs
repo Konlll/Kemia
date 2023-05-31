@@ -35,19 +35,40 @@ namespace ConsoleApp1
                 }
             }
             Console.WriteLine("6. feladat: Keresés");
-            Elem foundElem = elems.First(x => x.Sign == sign);
-            if(foundElem != null)
+            try
             {
+                Elem foundElem = elems.First(x => x.Sign.ToLower() == sign.ToLower());
                 Console.WriteLine($"\tAz elem vegyjele: {foundElem.Sign}");
                 Console.WriteLine($"\tAz elem neve: {foundElem.Name}");
                 Console.WriteLine($"\tRendszáma: {foundElem.PlateNumber}");
                 Console.WriteLine($"\tFelfedezés éve: {foundElem.Year}");
                 Console.WriteLine($"\tFelfedező: {foundElem.Explorer}");
             }
-            else
+            catch (Exception)
             {
                 Console.WriteLine("\tNincs ilyen elem az adatforrásban!");
             }
+
+            List<Elem> filteredElems = elems.SkipWhile(x => x.Year == "Ókor").ToList();
+            int year = 0;
+            for(int i = 0; i < filteredElems.Count; i++)
+            {
+                try
+                {
+                    if(int.Parse(filteredElems[i+1].Year) - int.Parse(filteredElems[i].Year) > year)
+                    {
+                        year = int.Parse(filteredElems[i + 1].Year) - int.Parse(filteredElems[i].Year);
+                    }
+                }
+                catch (Exception)
+                {
+                    break;
+                }
+            }
+            Console.WriteLine($"7. feladat: {year} év volt a leghosszabb időszak két elem felfedezése között.");
+
+            Console.WriteLine("8. feladat: Statisztika");
+            //List<Elem> years = elems.GroupBy(x => x.Year);
         }
     }
 }
